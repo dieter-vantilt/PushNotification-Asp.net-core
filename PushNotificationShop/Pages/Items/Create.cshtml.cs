@@ -47,13 +47,6 @@ namespace PushNotificationShop.Pages.Items
                 "<publickey>",
                 "<privatekey>");
 
-            var payload = JsonConvert.SerializeObject(
-                new
-                {
-                    drink = new { Name = "test", Slug = "test1" },
-                    brand = new { Name = "testklop", Slug = "jki" }
-                });
-
             var pushSubscriptions = await _context.PushSubscriptions.ToListAsync();
 
             var webPushClient = new WebPushClient();
@@ -62,9 +55,9 @@ namespace PushNotificationShop.Pages.Items
 
             foreach(var pushSubscription in pushSubscriptions)
             {
-                var ffdsfs = new WebPush.PushSubscription(pushSubscription.EndPoint, pushSubscription.P256dh, pushSubscription.Auth);
+                var webPushSubscription = new WebPush.PushSubscription(pushSubscription.EndPoint, pushSubscription.P256dh, pushSubscription.Auth);
 
-                tasks.Add(webPushClient.SendNotificationAsync(ffdsfs, "test", vapidDetails));
+                tasks.Add(webPushClient.SendNotificationAsync(webPushSubscription, "test", vapidDetails));
             }
 
             await Task.WhenAll(tasks);
